@@ -1,10 +1,12 @@
 {
-  "phase": "proposal_ready",
+  "phase": "questions_ready",
   "idea_name": "AgentMint — AI Agent 自动赚钱系统",
-  "last_updated": "2026-05-28T22:30:00+08:00",
+  "last_updated": "2026-05-28T22:55:00+08:00",
   "log": [
     "2026-05-28: Agent 1 cron job (DeepSeek V4 Pro) 生成初始提案",
     "2026-05-28: 导演重构提案并写入 proposal.md",
-    "2026-05-28: phase → proposal_ready，等待 Agent 2 质询"
+    "2026-05-28: phase → proposal_ready，等待 Agent 2 质询",
+    "2026-05-28: Agent 2 (Mac-Hermes, GPT-5.5) 完成 10 维度质询，写入 questions.md",
+    "2026-05-28: phase → questions_ready，等待 Agent 1 (二代-hermes) 答辩"
   ]
 }
