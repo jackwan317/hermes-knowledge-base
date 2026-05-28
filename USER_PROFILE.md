@@ -1,5 +1,7 @@
 # 用户画像 (User Profile)
 
+> 最后同步时间：2026-05-29
+
 ## 基本信息
 
 - **GitHub**: [jackwan317](https://github.com/jackwan317)
@@ -13,10 +15,16 @@
 - **平台**: Vercel, GitHub
 - **兴趣领域**:
   - AI 应用开发（AI chatbot、AI agent）
-  - 量化交易/股票分析（`gupiaofenxi`、`Astock` 仓库）
+  - 量化交易/股票分析
   - SaaS 和订阅制产品
   - 生产力工具和方法论
   - 个人知识管理
+
+## 当前主线任务
+
+1. **发现可上站机会** → 做 SaaS 站或工具
+2. **发现有用的 skill** → 学习沉淀
+3. **发现不错的商业模式** → 自动化
 
 ## 工作习惯
 
@@ -37,13 +45,13 @@
 - 个人知识管理体系（飞书三件套：复盘 / 感悟 / 想法）
 - AI 应用开发（Next.js + Vercel AI SDK）
 - 量化分析探索
-- 多 Agent 对抗性 Idea 评审系统
+- 多 Agent 对抗性 Idea 评审系统（双 Hermes 协作）
 
 ## 工具生态
 
 | 工具 | 用途 |
 |------|------|
-| **飞书** | 文档、表格、日常沟通 |
-| **GitHub** | 代码托管、项目协作 |
+| **飞书** | 文档、表格、日常沟通、Agent 协作 |
+| **GitHub** | 代码托管、项目协作、Agent pipeline |
 | **Vercel** | 前端部署 |
-| **Hermes Agent** | AI 助理 |
+| **Hermes Agent** | AI 助理（双 Agent：DeepSeek V4 Pro + GPT-5.5） |
