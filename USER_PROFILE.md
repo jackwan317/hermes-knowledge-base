@@ -1,57 +1,9 @@
-# 用户画像 (User Profile)
-
-> 最后同步时间：2026-05-29
-
-## 基本信息
-
-- **GitHub**: [jackwan317](https://github.com/jackwan317)
-- **飞书**: 在中国大陆飞书工作区使用
-- **交流语言**: 中文
-
-## 技术栈与兴趣
-
-- **语言**: Python, TypeScript, JavaScript, HTML
-- **框架**: Next.js, Vercel AI SDK
-- **平台**: Vercel, GitHub
-- **兴趣领域**:
-  - AI 应用开发（AI chatbot、AI agent）
-  - 量化交易/股票分析
-  - SaaS 和订阅制产品
-  - 生产力工具和方法论
-  - 个人知识管理
-
-## 当前主线任务
-
-1. **发现可上站机会** → 做 SaaS 站或工具
-2. **发现有用的 skill** → 学习沉淀
-3. **发现不错的商业模式** → 自动化
-
-## 工作习惯
-
-1. **每日复盘**: 每天在飞书 Bitable 中记录今日亮点、不足、明日计划
-2. **感悟记录**: 随时在飞书文档中记录对概念、原理的思考感悟
-3. **想法管理**: 随时在飞书 Bitable 中捕捉点子，由 AI 辅助评估投产比
-4. **内容偏好**: 保留原始行文结构，仅清理口头禅和啰嗦句式，不要过度润色
-
-## 与 Hermes 的交互偏好
-
-- 使用飞书作为主要交互平台
-- 偏好结构化、可操作的建议
-- 喜欢 AI 辅助决策（如想法投产比评估），但复杂执行需先确认
-- 注重知识沉淀和复用（本仓库的创建动机就是避免重复教 AI）
-
-## 当前活跃项目
-
-- 个人知识管理体系（飞书三件套：复盘 / 感悟 / 想法）
-- AI 应用开发（Next.js + Vercel AI SDK）
-- 量化分析探索
-- 多 Agent 对抗性 Idea 评审系统（双 Hermes 协作）
-
-## 工具生态
-
-| 工具 | 用途 |
-|------|------|
-| **飞书** | 文档、表格、日常沟通、Agent 协作 |
-| **GitHub** | 代码托管、项目协作、Agent pipeline |
-| **Vercel** | 前端部署 |
-| **Hermes Agent** | AI 助理（双 Agent：DeepSeek V4 Pro + GPT-5.5） |
+默认飞书文档创建位置：文件夹「WYvrfJEuflZtMQdgUcjcc2HlnLX」，内含：
+- 📊 每日复盘 Bitable：VsL5b9zSRaO3A7sPBdWcye49nBb
+- 📄 感悟记录 Doc：MnQRd4rNUoctsVxM4rPcLcRRn04
+- 💡 想法记录 Bitable：WSyEbu2EhavajVsQBVRcYbKenWb，table_id=tblvSu7Bv3yQw7oH
+  字段：编号/记录时间/想法/期待结果/执行情况/调研与思考/投产比评估/投入成本/技术可行性
+  投产比选项：⭐绝佳点子/👍一般/❌不靠谱/🤔待评估
+  可行性选项：✅高/🟡中/🔴低/🚫不可行
+§
+当前三条主线任务：1. 发现可上站机会 → 做 SaaS 站或工具；2. 发现有用的 skill → 学习沉淀；3. 发现不错的商业模式 → 自动化。
