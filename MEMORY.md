@@ -13,10 +13,7 @@
 §
 用户 3 个月目标：睡后月入过万的产品或商业模式。6 个月目标：累计赚 50 万。工作方式：① 用户发生财有术帖子 → 我重构为 AI Agent 可执行的 SOP（整条链路，非单步提效）；② 定期搜索 skills 仓库找赚钱相关 skill/skill 组合，搜到先给用户审，不擅自安装。搜索方向：低成本获客、商机发现、产品选品上线售卖等。
 §
-两个 GitHub 仓库：
-1. 知识库：jackwan317/hermes-knowledge-base — 本地路径 ~/hermes-knowledge-base/
-2. 报告库：jackwan317/hermes-reports — 本地路径 ~/hermes-reports/
-GitHub 账号：jackwan317。当前国内服务器网络不通 GitHub，无法 push。迁移到海外服务器后恢复。
+当前国内服务器网络不稳定：GitHub.com 和 API 可通但 raw.githubusercontent.com 仍超时，git push/pull 时好时坏（knowledge-base 可 push，reports 偶断连），Reddit/Google 等仍不通。迁移海外后恢复。
 §
 用户搭建了双 Hermes Agent 对抗性 Idea 评审系统：
 - 本 Agent：二代-hermes（DeepSeek V4 Pro）= Agent 1 猎手+辩手
@@ -33,8 +30,6 @@ GitHub 账号：jackwan317。当前国内服务器网络不通 GitHub，无法 p
 3. 「用户为什么不自己做」是伪命题——花钱省时间是市场常态
 4. B2C 不应被毙掉，可以跑——用户也考虑 B2C 业务
 §
-Idea 筛选标准（硬门槛+偏好）：
-硬门槛缺一不可：① 搜索趋势/社区热度高 ② 技术成熟可做
-不预设 B2B/B2C——B2C 更容易验证市场，不毙掉。
-唯一一票否决：重依赖单一封闭平台 API + 自建双边冷启动。
-环境：当前国内服务器外网全不通（GitHub/Google/Reddit 全部超时），迁移海外后恢复。
+Idea 筛选标准：① 搜索趋势/社区热度高 ② 技术成熟可做。不预设 B2B/B2C，B2C 可跑。唯一一票否决：重依赖单一封闭平台 API + 自建双边冷启动。
+§
+行为约定（已固化 skill：productivity/mvp-first）：用户描述任何 idea 时，先给 MVP 验证方案再评价。MVP ≤4h，终点是验证性结果非产出物。偏离 MVP 直接指出不附和。新 Hermes 加载 skill 即继承。
