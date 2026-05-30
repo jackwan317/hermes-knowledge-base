@@ -4,16 +4,54 @@ Procedure for syncing Hermes Agent's active memory and skills to the `jackwan317
 
 ## When to Run
 
-- Cron job or on-demand sync of all Hermes memories and skills
-- After significant memory updates or skill changes
+- **Migration**: Full exact backup before moving Hermes to a new server. GitHub is the transfer medium.
+- **Cron sync**: Incremental sync every 2 days via cron job `ebd1b672b71a`.
+
+## Two Modes: Migration vs Incremental Sync
+
+### Mode A — Full Migration Backup (原样，不概括)
+
+Use when transferring Hermes to a new server. The goal is **exact copy** so the new Hermes can read and learn directly with zero information loss.
+
+**Memory files**: Copy raw files as-is — NO reformatting, NO summarization:
+```bash
+cp ~/.hermes/memories/MEMORY.md ./MEMORY.md
+cp ~/.hermes/memories/USER.md ./USER_PROFILE.md
+```
+
+**Skills**: Rsync ALL skills (not just custom ones). The new Hermes needs the full skill library to function:
+```bash
+rsync -a --delete ~/.hermes/skills/ ./skills/
+# Remove noisy tracker files
+rm -f ./skills/.usage.json ./skills/.bundled_manifest ./skills/.curator_state
+find ./skills -name "*.lock" -delete
+```
+
+**PITFALL**: `rm -rf skills-backup/` times out on large directories (~550 files). Use `git rm -r` instead — it's faster and properly stages the deletion.
+
+**Cleanup**: If there was an old `skills-backup/` directory from a previous backup, remove it after the rsync (the new `skills/` replaces it).
+
+**Commit and push**:
+```bash
+git add -A
+git commit -m "backup: 全量原样备份记忆和技能 - $(date -I)"
+git push origin main
+```
+
+### Mode B — Incremental Cron Sync
+
+Use for the every-2-day cron job. Only sync what changed; preserve the repo's rich markdown formatting for readability.
 
 ## Source Files (Hermes → Repo direction)
 
-| Source (Hermes active) | Destination (repo) |
-|---|---|
-| `~/.hermes/memories/MEMORY.md` | `~/hermes-knowledge-base/MEMORY.md` |
-| `~/.hermes/memories/USER.md` | `~/hermes-knowledge-base/USER_PROFILE.md` |
-| `~/.hermes/skills/*/SKILL.md` | `~/hermes-knowledge-base/skills/*/SKILL.md` |
+| Source (Hermes active) | Destination (repo) | Mode |
+|---|---|---|
+| `~/.hermes/memories/MEMORY.md` | `~/hermes-knowledge-base/MEMORY.md` | A: exact copy / B: merge into rich format |
+| `~/.hermes/memories/USER.md` | `~/hermes-knowledge-base/USER_PROFILE.md` | A: exact copy / B: merge into rich format |
+| `~/.hermes/skills/` | `~/hermes-knowledge-base/skills/` | A: rsync all / B: sync changed only |
+
+**Mode A (Migration)**: Direct copy, no format changes. The new Hermes reads raw files from the repo and learns directly.
+**Mode B (Incremental Sync)**: The repo files use richer markdown with headers, tables, and structured formatting. Merge new Hermes content into the repo's formatting.
 
 ## Procedure
 
@@ -77,8 +115,10 @@ The token works for `curl` with `Authorization: Bearer` header, but for `git pus
 
 ## Pitfalls
 
+- **Migration (Mode A) vs Sync (Mode B)**: Migration copies raw files exactly. Don't reformat or summarize — the new Hermes reads them directly. Incremental sync preserves rich formatting.
 - **Remote ahead of local**: `git pull --rebase` before pushing if remote has new commits
 - **Token expiry**: Always read from `~/.hermes/.env`, not from the shell env
-- **Network restrictions**: Current server is in China with no outbound GitHub access. If push hangs, the server may still be restricted
-- **Memory format drift**: Hermes memory is compact (`§` delimited), repo is rich markdown. Don't overwrite the rich format with the compact one — merge new facts into the rich structure
-- **Built-in vs custom skills**: Most skills in `~/.hermes/skills/` are Hermes built-ins. Only sync skills that have been customized by the user (check with `diff`). Built-in skills change with Hermes updates and shouldn't be mirrored
+- **Network flakiness**: GitHub.com and API work intermittently; raw.githubusercontent.com is blocked. Test with `curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 https://github.com` before starting. If push hangs, retry or fall back to API upload.
+- **`rm -rf` timeout**: On directories with hundreds of files, `rm -rf` can hang. Use `git rm -r` — it stages deletions and is faster.
+- **Memory format drift** (Mode B only): Hermes memory is compact (`§` delimited), repo is rich markdown. Don't overwrite the rich format with the compact one — merge new facts into the rich structure.
+- **Built-in vs custom skills** (Mode B only): Most skills in `~/.hermes/skills/` are Hermes built-ins. Only sync skills that have been customized by the user (check with `diff`). Built-in skills change with Hermes updates and shouldn't be mirrored. Mode A (migration) copies ALL skills.
