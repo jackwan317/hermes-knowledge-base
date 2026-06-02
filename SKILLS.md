@@ -7,7 +7,7 @@
 
 ## 1. 对抗性 Idea 评审系统 (`idea-adversarial-review`)
 
-**Skill 文件**: [skills/autonomous-ai-agents/idea-adversarial-review/SKILL.md](skills/autonomous-ai-agents/idea-adversarial-review/SKILL.md)
+**Skill 文件**: [skills/.archive/idea-adversarial-review/SKILL.md](skills/.archive/idea-adversarial-review/SKILL.md) (已归档)
 
 ### 用途
 通过 4-Agent 对抗性辩论流水线，系统性评估商业/产品 Idea 的可行性。

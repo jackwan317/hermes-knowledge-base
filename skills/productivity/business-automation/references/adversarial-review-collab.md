@@ -48,4 +48,5 @@ judged          → Mac 评完了，流程结束
 
 ## 详细操作步骤
 
-详见 `idea-adversarial-review` skill。
+详见 `references/adversarial-review-protocol.md`（含完整 Agent Prompt、工作流阶段、Pitfalls、编排参考代码）。
+首次和第二次实战执行日志见 `references/adversarial-review-first-run-log.md` 和 `references/adversarial-review-second-run-log.md`。
