@@ -69,7 +69,21 @@ cat ~/hermes-knowledge-base/USER_PROFILE.md
 
 The Hermes memory files use a terse paragraph format (sections separated by `§`). The repo files use richer markdown with headers, tables, and structured formatting. When syncing, the repo format should be preserved — merge new Hermes content into the repo's formatting, not the other way around.
 
-### 2. Compare skill files efficiently (bulk hash)
+### 2. Compare skill files efficiently
+
+**For small incremental syncs (≤15 custom skills)**: Don't use the hash script — it's overkill. Compare byte counts with `wc -c` to quickly confirm nothing changed without diffing every line:
+
+```bash
+cd ~/hermes-knowledge-base
+for f in skills/path/to/skill/SKILL.md ...; do
+  echo "=== $f ===" && wc -c < "$f"
+done
+# Run the same loop against ~/.hermes/skills/ and compare counts visually
+```
+
+If byte counts match, the files are identical — skip the diff. If any differ, use `diff` to inspect.
+
+**For migration (550+ files)**: Use the Python hash script:
 
 Don't diff files one-by-one — with 550+ skill files, that costs too many tool calls. Use a single Python script that walks both directories and compares MD5 hashes:
 
@@ -151,7 +165,9 @@ The token works for `curl` with `Authorization: Bearer` header, but for `git pus
 - **Migration (Mode A) vs Sync (Mode B)**: Migration copies raw files exactly. Don't reformat or summarize — the new Hermes reads them directly. Incremental sync preserves rich formatting.
 - **Remote ahead of local**: `git pull --rebase` before pushing if remote has new commits
 - **Token expiry**: Always read from `~/.hermes/.env`, not from the shell env
-- **Network flakiness**: GitHub.com and API work intermittently; raw.githubusercontent.com is blocked. Test with `curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 https://github.com` before starting. If push hangs, retry or fall back to API upload.
+- **Network flakiness**: GitHub.com and API work intermittently; raw.githubusercontent.com is blocked. Test with `curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 https://github.com` before starting. If push hangs, retry with a longer timeout — `git push` at 60s often times out but succeeds at 120s. Don't give up on the first timeout; the commit already landed locally so you just need the push to go through. If retries fail, fall back to API upload (see `github-auth/references/api-upload-fallback.md`).
+- **`memory` tool unavailable in cron session**: The `memory` tool may not be in the cron agent's tool list. Fallback: read `~/.hermes/memories/MEMORY.md` and `~/.hermes/memories/USER.md` directly with `read_file`. These are the raw source files the `memory` tool writes to — same content, just accessed through the filesystem instead of the tool API. The `§` delimiter separates entries. This bypasses the memory tool entirely and works regardless of tool availability.
+- **Live memory is canonical for Mode B**: When the KB has embellishments a previous sync agent added (extra context, formatting expansions) that aren't in the live memory, the live memory wins. Sync direction is Hermes → KB, not KB → Hermes. If the KB has richer detail, that's a previous sync's artifact, not the user's current intent. Strip it in favor of what's actually in `~/.hermes/memories/`.
 - **`rm -rf` timeout**: On directories with hundreds of files, `rm -rf` can hang. Use `git rm -r` — it stages deletions and is faster.
 - **Memory format drift** (Mode B only): Hermes memory is compact (`§` delimited), repo is rich markdown. Don't overwrite the rich format with the compact one — merge new facts into the rich structure.
 - **Cron + heredoc scripts**: When running as a cron job with `approvals.mode: manual`, heredoc scripts like `python3 << 'EOF'` trigger `approval_required` and block. Write Python code to a `.py` file first with `write_file`, then execute with `terminal` — direct script files pass through without approval.
