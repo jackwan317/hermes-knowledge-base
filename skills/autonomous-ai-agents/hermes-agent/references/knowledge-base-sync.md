@@ -71,7 +71,15 @@ The Hermes memory files use a terse paragraph format (sections separated by `§`
 
 ### 2. Compare skill files efficiently
 
-**For small incremental syncs (≤15 custom skills)**: Don't use the hash script — it's overkill. Compare byte counts with `wc -c` to quickly confirm nothing changed without diffing every line:
+**For incremental syncs (preferred)**: Use `rsync --dry-run` to detect changes across ALL files instantly — no scripts, no manual loops, no tool-call overhead:
+
+```bash
+rsync -avnc --delete ~/.hermes/skills/ ~/hermes-knowledge-base/skills/
+```
+
+Flags: `-a` (archive/preserve), `-v` (verbose), `-n` (dry-run, no changes), `-c` (checksum-based, not time/size). If output is ONLY directory paths (no file paths), all files are byte-identical — no sync needed. If file paths appear, those specific files differ and need updating. The `--delete` flag also detects files in the repo that don't exist in Hermes.
+
+**For small incremental syncs (≤15 custom skills)**: Alternative — compare byte counts with `wc -c`:
 
 ```bash
 cd ~/hermes-knowledge-base
@@ -83,7 +91,7 @@ done
 
 If byte counts match, the files are identical — skip the diff. If any differ, use `diff` to inspect.
 
-**For migration (550+ files)**: Use the Python hash script:
+**For migration (550+ files)**: Use the Python hash script (rsync dry-run also works but the hash script gives structured new/deleted/changed lists):
 
 Don't diff files one-by-one — with 550+ skill files, that costs too many tool calls. Use a single Python script that walks both directories and compares MD5 hashes:
 
@@ -169,6 +177,7 @@ The token works for `curl` with `Authorization: Bearer` header, but for `git pus
 - **`memory` tool unavailable in cron session**: The `memory` tool may not be in the cron agent's tool list. Fallback: read `~/.hermes/memories/MEMORY.md` and `~/.hermes/memories/USER.md` directly with `read_file`. These are the raw source files the `memory` tool writes to — same content, just accessed through the filesystem instead of the tool API. The `§` delimiter separates entries. This bypasses the memory tool entirely and works regardless of tool availability.
 - **Live memory is canonical for Mode B**: When the KB has embellishments a previous sync agent added (extra context, formatting expansions) that aren't in the live memory, the live memory wins. Sync direction is Hermes → KB, not KB → Hermes. If the KB has richer detail, that's a previous sync's artifact, not the user's current intent. Strip it in favor of what's actually in `~/.hermes/memories/`.
 - **`rm -rf` timeout**: On directories with hundreds of files, `rm -rf` can hang. Use `git rm -r` — it stages deletions and is faster.
+- **Trailing newline diffs**: `diff` often reports a file as different when the only change is a trailing `\n` at EOF. If `rsync -avnc` reports no file-level changes (only directory paths), the files are byte-identical — the newline difference is already handled by the copy process and not worth a standalone commit cycle. Only sync when actual content changed.
 - **Memory format drift** (Mode B only): Hermes memory is compact (`§` delimited), repo is rich markdown. Don't overwrite the rich format with the compact one — merge new facts into the rich structure.
 - **Cron + heredoc scripts**: When running as a cron job with `approvals.mode: manual`, heredoc scripts like `python3 << 'EOF'` trigger `approval_required` and block. Write Python code to a `.py` file first with `write_file`, then execute with `terminal` — direct script files pass through without approval.
 - **Built-in vs custom skills** (Mode B only): Most skills in `~/.hermes/skills/` are Hermes built-ins. Only sync skills that have been customized by the user (check with `diff`). Built-in skills change with Hermes updates and shouldn't be mirrored. Mode A (migration) copies ALL skills.
