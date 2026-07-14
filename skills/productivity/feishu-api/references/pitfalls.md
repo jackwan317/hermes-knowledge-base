@@ -56,3 +56,37 @@ Field IDs are only valid for field management endpoints: rename (`PUT /fields/{f
 ## Doc API Requires revision_id
 
 When appending children to a doc via `POST .../blocks/{id}/children`, you MUST include `?document_revision_id=${REV}` in the URL. Omitting it causes `code: 1770001, invalid param` even when the request body is valid. Get the revision from `GET .../documents/{doc_id}` first.
+
+## Folder Token Can Go Stale (DriveNodeNotExist)
+
+A previously valid `folder_token` can return `DriveNodeNotExist` (code 1254702) if the folder was renamed, moved, or deleted. 
+
+**Workaround**: Create the Bitable without a `folder_token` (in root), then manually move it to the target folder in the Feishu UI. The no-folder approach always works.
+
+```bash
+# Fallback: create in root
+-d '{"name": "表格名称"}'
+# Instead of:
+-d '{"name": "表格名称", "folder_token": "WYvrf..."}'
+```
+
+## PUT vs POST for Field Operations
+
+When using the Feishu Bitable API, different field operations need different HTTP methods:
+
+- **Rename field**: `PUT /fields/{field_id}` with `{"field_name": "...", "type": N}`
+- **Add field**: `POST /fields` with `{"field_name": "...", "type": N}`
+- **Delete field**: `DELETE /fields/{field_id}`
+
+Using `POST` for a rename will fail silently or return unexpected data. Always use `PUT` for renames.
+
+When wrapping in a helper function, add a `method` parameter:
+
+```python
+def feishu_post(token, path, body, method="POST"):
+    subprocess.run(["curl", "-s", "-X", method, path, ...])
+
+# Usage:
+feishu_post(token, rename_url, body, method="PUT")
+feishu_post(token, add_url, body)  # default POST
+```
