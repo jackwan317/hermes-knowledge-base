@@ -58,6 +58,8 @@ curl -s -X GET "https://open.feishu.cn/open-apis/bitable/v1/apps/${APP_TOKEN}/ta
 
 ## Rename a Field
 
+**Uses PUT, not POST.** This is different from adding a field.
+
 ```bash
 curl -s -X PUT "https://open.feishu.cn/open-apis/bitable/v1/apps/${APP_TOKEN}/tables/${TABLE_ID}/fields/${FIELD_ID}" \
   -H "Authorization: Bearer ${TOKEN}" \
@@ -65,7 +67,7 @@ curl -s -X PUT "https://open.feishu.cn/open-apis/bitable/v1/apps/${APP_TOKEN}/ta
   -d '{"field_name": "New Name", "type": 1}' | python3 -m json.tool
 ```
 
-**PITFALL**: Renaming a field may cause other unchanged fields to disappear. Always re-list fields after renaming to confirm what remains.
+**PITFALL**: Using POST instead of PUT for field rename fails silently. Renaming a field may cause other unchanged fields to disappear — always re-list fields after renaming to confirm what remains.
 
 ## Add a Field
 
